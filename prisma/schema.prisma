@@ -12,9 +12,8 @@ model Image {
   id       String  @id @default(cuid())
   url      String
   alt      String
-  userId   String? @unique
-  folderId String? @unique
-  folder   Folder? @relation(fields: [folderId], references: [id])
+  user     User?
+  folder   Folder?
 }
 
 model Account {
@@ -53,28 +52,32 @@ model User {
   updatedAt     DateTime?  @updatedAt
   accounts      Account[]
   folders       Folder[]
-  image         String
-  imageId  String?
   sessions      Session[]
+  image         String
+  imageId       String?
+  avatarId      String?   @unique
+  avatar        Image?    @relation(fields: [avatarId], references: [id])
 }
 
 model Folder {
   id       String  @id @default(cuid())
   slug     String  @unique
   title    String
+
   authorId String
-  imageId  String?
-  files    File[]
   author   User    @relation(fields: [authorId], references: [id])
-  image    Image?
+  imageId  String? @unique 
+  image    Image?  @relation(fields: [imageId], references: [id])
+
+  files    File[]
 }
 
 model File {
   id       String  @id @default(cuid())
   name     String
   url      String
-  folderId String?
-  folder   Folder? @relation(fields: [folderId], references: [id])
+  folderId String @unique
+  folder   Folder @relation(fields: [folderId], references: [id])
 }
 
 model VerificationToken {
