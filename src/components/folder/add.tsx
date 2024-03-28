@@ -20,21 +20,29 @@ const FolderAdd = ({mutate}:{mutate:KeyedMutator<any>}) => {
 
     const handleSubmit = async () => {
 
-        await post('/api/images', {url: image.url, path:image.key}).then(async res=>{
-            
-            const payload = { 
-                title: name,
-                slug : name.toLowerCase().replace(/ /g,'-'),
-                authorId : userId,
-                imageId : res.id
+        const payload = { 
+            title: name,
+            slug : name.toLowerCase().replace(/ /g,'-'),
+            authorId : userId,
+            image:{
+                url: image.url, 
+                alt:image.key
             }
+        }
 
-            await post('/api/folders', payload).then(async () => {
-                mutate()
-                setIsOpen(false)
+        await post('/api/folders', payload).then(()=>{
+            Swal.fire({
+                title: 'Success!',
+                text: 'Folder added successfully!',
+                icon: 'success',
+                confirmButtonText: 'Next'
             })
+            mutate()
+            setIsOpen(false)
+            setImage(null)
+            setName('')
+            
         })
-
     }
 
     return (
@@ -105,7 +113,6 @@ const FolderAdd = ({mutate}:{mutate:KeyedMutator<any>}) => {
                                                                 icon: 'success',
                                                                 confirmButtonText: 'Next'
                                                             })
-                                                            console.log(res[0])
                                                             setSubmit(true)
                                                             setImage(res[0])
                                                         }}

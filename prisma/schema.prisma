@@ -16,6 +16,28 @@ model Image {
   folder   Folder?
 }
 
+model Group {
+  id       String  @id @default(cuid())
+  name     String
+  folders    Folder[]
+
+}
+
+model Folder {
+  id       String  @id @default(cuid())
+  slug     String  @unique
+  title    String
+
+  authorId String
+  author   User?    @relation(fields: [authorId], references: [id])
+  imageId  String? @unique 
+  image    Image?  @relation(fields: [imageId], references: [id])
+
+  group    Group? @relation(fields: [groupId], references: [id])
+  groupId  String? 
+  files    File[]
+}
+
 model Account {
   id                 String  @id @default(cuid())
   userId             String
@@ -59,18 +81,6 @@ model User {
   avatar        Image?    @relation(fields: [avatarId], references: [id])
 }
 
-model Folder {
-  id       String  @id @default(cuid())
-  slug     String  @unique
-  title    String
-
-  authorId String
-  author   User    @relation(fields: [authorId], references: [id])
-  imageId  String? @unique 
-  image    Image?  @relation(fields: [imageId], references: [id])
-
-  files    File[]
-}
 
 model File {
   id       String  @id @default(cuid())

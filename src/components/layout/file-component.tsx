@@ -15,7 +15,7 @@ const FileComponent = () => {
 
     return (
         <div className="hidden lg:inset-y-0 lg:z-[1] lg:flex lg:flex-col">
-            <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white duration-700">
+            <div className="flex grow flex-col gap-y-5 border-r border-gray-200 bg-white duration-700">
                 <div className="py-5">
                     <nav className="flex flex-1 flex-col px-6">
                         <ul role="list" className="-mx-2 space-y-1 flex flex-1 flex-col">

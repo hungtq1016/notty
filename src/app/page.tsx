@@ -1,5 +1,6 @@
 import { ArrowPathIcon, ChevronRightIcon, CloudArrowUpIcon, Cog6ToothIcon, FingerPrintIcon, LockClosedIcon, ServerIcon, } from '@heroicons/react/20/solid'
 import { BoltIcon, CalendarDaysIcon, UsersIcon } from '@heroicons/react/24/outline'
+import Link from 'next/link'
 import { JSX, SVGProps } from 'react'
   
 const primaryFeatures = [
@@ -221,15 +222,15 @@ const primaryFeatures = [
                   fugiat veniam occaecat fugiat aliqua.
                 </p>
                 <div className="mt-10 flex items-center gap-x-6">
-                  <a
-                    href="#"
+                  <Link
+                    href="/api/auth/signin"
                     className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400"
                   >
                     Get started
-                  </a>
-                  <a href="#" className="text-sm font-semibold leading-6 text-white">
+                  </Link>
+                  <Link href="/note/me" className="text-sm font-semibold leading-6 text-white">
                     Live demo <span aria-hidden="true">→</span>
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32">
