@@ -1,16 +1,18 @@
 import useSWR from 'swr';
 
-import {get} from '@/utils/helpers/request.helper';
+import { TFolder } from '@/types/type';
+import { get } from '@/utils/helpers/request.helper';
 
 const useFolders= (query?:any) => {
     
-  const { data, error, isLoading, mutate , isValidating} = useSWR('/api/folders', url => get(url,query));
+  const { data, error, isLoading, mutate , isValidating} = useSWR<TFolder[]>('/api/folders', (url:string) => get(url,query));
 
   return {
     data,
     error,
     isLoading,
-    mutate
+    mutate,
+    isValidating
   }
 };
 

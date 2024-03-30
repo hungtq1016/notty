@@ -9,48 +9,47 @@ datasource db {
 }
 
 model Image {
-  id       String  @id @default(cuid())
-  url      String
-  alt      String
-  user     User?
-  folder   Folder?
+  id     String  @id @default(cuid())
+  url    String
+  alt    String
+  user   User?
+  folder Folder?
 }
 
 model Group {
-  id       String  @id @default(cuid())
-  name     String
-  folders    Folder[]
-
+  id      String   @id @default(cuid())
+  name    String
+  folders Folder[]
 }
 
 model Folder {
-  id       String  @id @default(cuid())
-  slug     String  @unique
-  title    String
+  id    String @id @default(cuid())
+  slug  String @unique
+  title String
 
   authorId String
-  author   User?    @relation(fields: [authorId], references: [id])
-  imageId  String? @unique 
+  author   User?   @relation(fields: [authorId], references: [id])
+  imageId  String? @unique
   image    Image?  @relation(fields: [imageId], references: [id])
 
-  group    Group? @relation(fields: [groupId], references: [id])
-  groupId  String? 
-  files    File[]
+  group   Group?  @relation(fields: [groupId], references: [id])
+  groupId String?
+  files   File[]
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -70,8 +69,8 @@ model User {
   name          String?
   email         String?   @unique
   emailVerified DateTime?
-  createdAt     DateTime?  @default(now())
-  updatedAt     DateTime?  @updatedAt
+  createdAt     DateTime? @default(now())
+  updatedAt     DateTime? @updatedAt
   accounts      Account[]
   folders       Folder[]
   sessions      Session[]
@@ -81,13 +80,24 @@ model User {
   avatar        Image?    @relation(fields: [avatarId], references: [id])
 }
 
-
 model File {
-  id       String  @id @default(cuid())
+  id       String @id @default(cuid())
   name     String
-  url      String
-  folderId String @unique
+  slug     String @unique
+  folderId String
   folder   Folder @relation(fields: [folderId], references: [id])
+
+  notes Note[]
+}
+
+model Note {
+  id       String @id @default(cuid())
+  title    String
+  content  String
+  fileId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  file   File @relation(fields: [fileId], references: [id])
 }
 
 model VerificationToken {

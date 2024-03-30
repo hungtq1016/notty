@@ -1,70 +1,78 @@
-import FolderItem from './item'
-import Link from 'next/link'
-import FolderAdd from './add'
-import useFolders from '@/utils/hooks/useFolders'
-import { useContext } from 'react'
-import { UserContext } from '../context/user-context'
-import UserAvatar from '../user/avatar'
-import LoadingVerticalItem from '../loading/vertical-item'
-import FolderMe from './me'
-import { TDynamic, TFolder } from '@/types/type'
-import FolderGroup from './group'
+import { useContext } from 'react';
+
+import {
+  TDynamic,
+  TFolder,
+} from '@/types/type';
+import useFolders from '@/utils/hooks/useFolders';
+
+import { UserContext } from '../context/user-context';
+import LoadingFolderLayout from '../loading/folder';
+import UserAvatar from '../user/avatar';
+import FolderAdd from './add';
+import FolderGroup from './group';
+import FolderItem from './item';
+import FolderMe from './me';
+
+'use client '
 
 const FolderComponent = () => {
-    const user = useContext(UserContext);
     
-    const { data: folders, isLoading, mutate ,error} = useFolders({authorId: user})
+    const user = useContext(UserContext);
 
-    if (isLoading || error) {
-        return <LoadingVerticalItem/>
+    const { data, isLoading, mutate, error } = useFolders({ authorId: user.id })
+
+    if (isLoading || error || data === undefined) {
+        return <LoadingFolderLayout />
     }
 
-    const groups: TDynamic<TFolder[]> = {};
-        
-    folders?.forEach((item:TFolder) => {
-        if (!groups[item.group?.name]) {
-            groups[item.group?.name] = [];
-        }
-        groups[item.group?.name].push(item);
-    });
-        
-    const sortedData = Object.keys(groups).map(group => groups[group]);
-
-    console.table(folders)
-    console.log(sortedData)
-      
     return (
-        <div className="flex flex-col bg-gray-100">
-            <div className="flex grow flex-col gap-y-5">
+        <div className="flex flex-col items-center bg-gray-100 w-14">
+            <div className="flex grow flex-col gap-y-5 w-12">
                 <div className="py-5">
-                    <nav className="flex flex-1 flex-col px-4">
-                        <ul role="list" className="-mx-2 space-y-1 flex flex-1 flex-col" >
+                    <nav className="flex flex-1 flex-col">
+                        <ul role="list" className="gap-y-1 flex flex-1 flex-col justify-between" >
                             <li><FolderMe /></li>
                             {
-                                sortedData?.map((folders:TFolder[],index:number) => (
-                                    folders[0].group === null ?
-                                    folders.map((folder:TFolder,index:number) => (
-                                        <li key={index}>
-                                            <FolderItem
-                                                {...folder}
-                                            />
-                                        </li>
-                                    ))
-                                    :
-                                    <FolderGroup folders={folders} key={index}/>
+                                FormatData(data).map((items: TFolder[], index: number) => (
+                                    <li key={index}>
+                                        {
+                                            items[0].group === null ?
+                                                <FolderItem {...items[0]} />
+                                                :
+                                                <FolderGroup folders={items} />
+                                        }
+                                    </li>
                                 ))
                             }
-                            <li>
-                                <FolderAdd mutate={mutate}/>
-                            </li>
+                            <li><FolderAdd mutate={mutate} /></li>
                         </ul>
-                        
+
                     </nav>
                 </div>
             </div>
-            <UserAvatar/>
+            <UserAvatar />
         </div>
     )
+}
+
+const FormatData = (arr: TFolder[]) => {
+
+    const groups: TDynamic<TFolder[]> = {};
+
+    arr?.forEach((item: TFolder) => {
+        if (item.group === null) {
+            groups[item.title] = [item];
+        } else {
+            if (!groups[item.group.name]) {
+                groups[item.group.name] = [];
+            }
+
+            groups[item.group.name].push(item);
+        }
+    });
+
+    return Object.keys(groups).map(group => groups[group]);
 }
 
 export default FolderComponent;

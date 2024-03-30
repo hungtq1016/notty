@@ -1,10 +1,11 @@
 import useSWR from 'swr';
 
 import {get} from '@/utils/helpers/request.helper';
+import { TUser } from '@/types/type';
 
 const useCurrentUser = () => {
     
-  const { data, error, isLoading, mutate } = useSWR('/api/user', get);
+  const { data, error, isLoading, mutate } = useSWR<TUser>('/api/user', get);
 
   return {
     data,

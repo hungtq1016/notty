@@ -1,10 +1,15 @@
+'use client'
+import { FileProvider } from "@/components/context/file-context";
+import NoteComponent from "@/components/note/component";
+
 const Page = () => {
 
   return (
-    <div>
-      <h1>Page</h1>
-
-    </div>
+    <FileProvider>
+      <div className="overflow-auto h-screen px-5">
+        <NoteComponent />
+      </div>
+    </FileProvider>
   );
 }
 

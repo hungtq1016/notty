@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import SessionComponent from "@/components/oauth2/session-component";
-import LayoutComponent from "@/components/layout/_layout";
+import LayoutComponent from "@/components/layout/folder-layout";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from '@/utils/common/oauth2-option'
 import { redirect } from "next/navigation";
+import { ToastContainer } from "react-toastify";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -27,7 +28,9 @@ export default async function RootLayout({
         <body className={inter.className + ' h-full'}>
           <LayoutComponent>
             {children}
-          </LayoutComponent>         
+          </LayoutComponent>   
+          <ToastContainer />
+      
         </body>
       </SessionComponent>
   );

@@ -7,8 +7,6 @@ const useFolder= (slug:string) => {
     
   const { data, error, isLoading, mutate , isValidating} = useSWR<TFolder>('/api/folders/'+slug, get);
 
-  
-
   return {
     data,
     error,
