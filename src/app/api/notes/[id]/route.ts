@@ -11,7 +11,7 @@ export async function GET(request: NextRequest,{params}: { params: { id: string 
         return NextResponse.json(res)
 
     } catch (error) {
-        return NextResponse.json({ error: error, status: 500 });
+        return new Response(String(error), { status: 500 });
     }
 }
 
@@ -40,7 +40,7 @@ export async function PUT(request: NextRequest,{params}: { params: { id: string 
         return NextResponse.json(res)
 
     } catch (error) {
-        return NextResponse.json({ error: error, status: 500 });
+        return new Response(String(error), { status: 500 });
     }
 }
 
@@ -55,6 +55,6 @@ export async function DELETE(request: NextRequest,{params}: { params: { id: stri
         return NextResponse.json(res)
 
     } catch (error) {
-        return NextResponse.json({ error: error, status: 500 });
+        return new Response(String(error), { status: 500 });
     }
 }

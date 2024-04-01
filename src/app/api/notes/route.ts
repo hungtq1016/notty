@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from '@/utils/libs/prisma'
-import { title } from "process";
 
 export async function GET(request: NextRequest) {
     try {
@@ -12,7 +11,7 @@ export async function GET(request: NextRequest) {
         })
         return NextResponse.json(res)
     } catch (error) {
-        return NextResponse.json({ error: error, status: 500 });
+        return new Response(String(error), { status: 500 });
     }
 }
 
@@ -26,6 +25,7 @@ export async function POST(request: NextRequest) {
         
         const res = await prisma.note.create({
             data: {
+                id: data.id,
                 fileId: data.fileId,
                 content: data.content,
                 title: data.title,
@@ -37,6 +37,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({...res});
 
     } catch (error) {
-        return NextResponse.json({ error: error, status: 500 });
+        return new Response(String(error), { status: 500 });
     } 
 }

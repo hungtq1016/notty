@@ -24,7 +24,8 @@
     "react-input-color": "^4.0.1",
     "react-toastify": "^10.0.5",
     "sweetalert2": "^11.10.7",
-    "swr": "^2.2.5"
+    "swr": "^2.2.5",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.11",

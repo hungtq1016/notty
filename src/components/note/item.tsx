@@ -2,11 +2,11 @@ import { TNote } from "@/types/type";
 import { useContext, useReducer, useState } from "react";
 import { format } from 'date-fns'
 import InputColor from 'react-input-color';
-import { put } from "@/utils/helpers/request.helper";
+import { del, put } from "@/utils/helpers/request.helper";
 import { FileContext } from "../context/file-context";
 import { StarIcon } from "@heroicons/react/20/solid";
 
-function NoteItem(note:TNote) {
+function NoteItem({ note, onDelete }: { note: TNote, onDelete: () => void }) {
 
     const [isEditable, setEditable] = useState(false);
     const file = useContext(FileContext);
@@ -20,17 +20,23 @@ function NoteItem(note:TNote) {
 
         return newEvent
     }, {
+        id: note.id,
         title: note.title,
         content: note.content,
-        color: note.color ,
-        prioritize : note.prioritize,
+        color: note.color,
+        prioritize: note.prioritize,
         fileId: file.id,
         updatedAt: note.updatedAt,
     })
 
-    const onSave = async () => {
-        await put('/api/notes', event)
+    const edit = async () => {
+        await put('/api/notes/' + event.id, event)
         setEditable(false)
+    }
+
+    const remove = async () => {
+        onDelete()
+        await del('/api/notes/' + event.id, event)
     }
 
     return (
@@ -66,7 +72,7 @@ function NoteItem(note:TNote) {
                 {
                     isEditable && (
                         <div className='mt-1 flex gap-1'>
-                            <input id="prioritize" type="checkbox" checked={event.prioritize} onChange={(e)=>setEvent({prioritize:e.target.checked})}/>
+                            <input id="prioritize" type="checkbox" checked={event.prioritize} onChange={(e) => setEvent({ prioritize: e.target.checked })} />
                             <label htmlFor="prioritize">Prioritize</label>
                         </div>
                     )
@@ -86,12 +92,13 @@ function NoteItem(note:TNote) {
                                 <>
                                     <button onClick={() => setEditable(false)}
                                         className='text-xs'>Cancel</button>
-                                    <button onClick={onSave}
+                                    <button onClick={edit}
                                         className='text-xs'>Save</button>
                                 </>
                             ) : (
                                 <>
-                                    <button className='text-xs'>Delete</button>
+                                    <button onClick={remove}
+                                        className='text-xs'>Delete</button>
 
                                     <button onClick={() => setEditable(true)}
                                         className='text-xs'>Edit</button>
@@ -100,9 +107,9 @@ function NoteItem(note:TNote) {
                         }
                     </div>
                 </div>
-                <div className="absolute bottom-1 right-1">
-                    {(event.prioritize && !isEditable ) && <span className="inline-block p-1 rounded-full bg-black"><StarIcon className="h-5 w-5 text-white"/></span>}
-                </div>
+                {(event.prioritize && !isEditable) && <div className="absolute bottom-1 right-1 inline-block p-1 rounded-full bg-black">
+                    <StarIcon className="h-5 w-5 text-white" />
+                </div>}
             </div>
         </li>
     );
