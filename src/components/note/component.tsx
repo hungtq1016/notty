@@ -5,13 +5,13 @@ import NoteItem from './item';
 import useNotes from '@/utils/hooks/useNotes';
 import NoteLoading from '../loading/note';
 import { TNote } from '@/types/type';
-
+import { post } from '@/utils/helpers/request.helper';
 
 function NoteComponent() {
 
     const file = useContext(FileContext);
 
-    const { data, isLoading, error } = useNotes({ fileId: file.id });
+    const { data, isLoading, error, isValidating } = useNotes({ fileId: file.id });
 
     const [notes, setNotes] = useState<TNote[] | undefined>(data);
 
@@ -19,15 +19,19 @@ function NoteComponent() {
         setNotes(data);
     }, [data])
 
-    if (isLoading || error || notes === undefined) return <NoteLoading />
+    if (isLoading || error || notes === undefined || isValidating) return <NoteLoading />
 
     const AddNote = () => {
         const init: TNote = {
-            title: 'New Note',
-            content: 'text here',
-            fileId: file.id
+            title: "Title",
+            content: "content",
+            color: '#fde68a',
+            prioritize : false,
+            fileId: file.id,
+            updatedAt: new Date().toISOString(),
         }
         setNotes([...notes, init])
+        post('/api/notes', init)
     }
 
     if (notes.length === 0) {
@@ -48,9 +52,9 @@ function NoteComponent() {
 
     return (
         <div className="py-5">
-            <ul className='flex flex-wrap justify-center relative w-full h-screen  mt-10'>
+            <ul className='w-full h-screen grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
                 {notes.map((item, index) => (
-                    <NoteItem key={index} props={item} onAction={() => removeNote(index)} />
+                    <NoteItem key={index} {...item}/>
                 ))}
             </ul>
         </div>

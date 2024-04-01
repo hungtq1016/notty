@@ -1,39 +1,108 @@
-'use client'
-import { TNote } from '@/types/type';
-import React, { useRef, useState } from 'react';
-import NoteDelete from './delete';
-import ConfirmDelete from './delete';
-import { useDebounce } from '@/utils/hooks/useDebounce';
-import { post } from '@/utils/helpers/request.helper';
+import { TNote } from "@/types/type";
+import { useContext, useReducer, useState } from "react";
+import { format } from 'date-fns'
+import InputColor from 'react-input-color';
+import { put } from "@/utils/helpers/request.helper";
+import { FileContext } from "../context/file-context";
+import { StarIcon } from "@heroicons/react/20/solid";
 
-function NoteItem({props, onAction}:{props: TNote, onAction: () => void}) {
+function NoteItem(note:TNote) {
 
-    const [note, setNote] = useState<TNote>(props);
+    const [isEditable, setEditable] = useState(false);
+    const file = useContext(FileContext);
 
-    const contentRef = useRef<HTMLDivElement>(null);
+    const [event, setEvent] = useReducer((prev: TNote, next: Partial<TNote>) => {
+        const newEvent = { ...prev, ...next };
 
-    const handleSave = useDebounce((note:TNote) => {
-        console.log(note)
-        post('/api/notes', note)
-    }, 1000);
+        if (newEvent.color === '') {
+            newEvent.color = '#fde68a'
+        }
 
-    const handleEdit = () => {
-        setNote({...note, title: contentRef.current?.querySelector('h2')?.innerText } as TNote);
-        setNote({...note, content: contentRef.current?.querySelector('p')?.innerText } as TNote);
-        handleSave(note)
+        return newEvent
+    }, {
+        title: note.title,
+        content: note.content,
+        color: note.color ,
+        prioritize : note.prioritize,
+        fileId: file.id,
+        updatedAt: note.updatedAt,
+    })
+
+    const onSave = async () => {
+        await put('/api/notes', event)
+        setEditable(false)
     }
 
-    const colors = ['#ff7eb9','#ff65a3','#7afcff','#feff9c','#fff740','#46c45a','#92daff','#7f4daf','#ffa6c1','#165caf']
-
     return (
-        <li className='relative hover:!z-[999]' style={{ transform: `rotate(${Math.floor(Math.random() * 30) - 15}deg)`,zIndex: Math.floor(Math.random() * 49) }}>
-            <div style={{ backgroundColor: colors[Math.floor(Math.random() * colors.length)], marginTop: Math.floor(Math.random() * 20)}}
-            className='text-black block w-64 h-64 p-4 shadow-lg transform rotate-6 hover:scale-125 hover:z-5 transition-transform duration-150 relative'
-                suppressContentEditableWarning={true}
-                contentEditable  onBlur={handleEdit} ref={contentRef} >
-                <ConfirmDelete id={String(props.id)} onAction={onAction}/>   
-                <h2 className='font-bold text-3xl'>{note.title}</h2>
-                <p className='font-["Reenie_Beanie"]'>{note.content}</p>
+        <li>
+            <div style={{ backgroundColor: event.color }}
+                className='rounded-lg shadow-lg p-4 m-2 relative'>
+                <div className='flex justify-between flex-wrap'>
+                    {
+                        isEditable ? (
+                            <input className="w-full bg-transparent/10"
+                                onChange={(e) => setEvent({ title: e.target.value })}
+                                type="text" value={event.title} />
+                        ) : (
+                            <>
+                                <span className='text-4xl font-jah capitalize truncate'>{event.title}</span>
+                                <span className='text-xs '>{format(event.updatedAt ?? new Date(), 'MM/dd/yyyy')}</span>
+                            </>
+                        )
+                    }
+
+                </div>
+                <div className='overflow-y-auto mt-1'>
+                    {
+                        isEditable ? (
+                            <textarea className="w-full bg-transparent/10 resize-none"
+                                onChange={(e) => setEvent({ content: e.target.value })}
+                                value={event.content}></textarea>
+                        ) : (
+                            <p className="font-handlee">{event.content}</p>
+                        )
+                    }
+                </div>
+                {
+                    isEditable && (
+                        <div className='mt-1 flex gap-1'>
+                            <input id="prioritize" type="checkbox" checked={event.prioritize} onChange={(e)=>setEvent({prioritize:e.target.checked})}/>
+                            <label htmlFor="prioritize">Prioritize</label>
+                        </div>
+                    )
+                }
+                <div className='flex justify-between mt-4'>
+                    {
+                        isEditable && <span className='text-xs'><InputColor
+                            initialValue={note.color}
+                            onChange={(e) => setEvent({ color: e.hex })}
+                            placement="right"
+                        /></span>
+                    }
+                    <div className='flex gap-2'>
+
+                        {
+                            isEditable ? (
+                                <>
+                                    <button onClick={() => setEditable(false)}
+                                        className='text-xs'>Cancel</button>
+                                    <button onClick={onSave}
+                                        className='text-xs'>Save</button>
+                                </>
+                            ) : (
+                                <>
+                                    <button className='text-xs'>Delete</button>
+
+                                    <button onClick={() => setEditable(true)}
+                                        className='text-xs'>Edit</button>
+                                </>
+                            )
+                        }
+                    </div>
+                </div>
+                <div className="absolute bottom-1 right-1">
+                    {(event.prioritize && !isEditable ) && <span className="inline-block p-1 rounded-full bg-black"><StarIcon className="h-5 w-5 text-white"/></span>}
+                </div>
             </div>
         </li>
     );

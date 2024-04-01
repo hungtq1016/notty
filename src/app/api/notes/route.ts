@@ -5,6 +5,7 @@ import { title } from "process";
 export async function GET(request: NextRequest) {
     try {
         const res = await prisma.note.findMany({
+            orderBy: { prioritize: 'desc' },
             where:{
                 fileId: String(request.nextUrl.searchParams.get("fileId"))
             }
@@ -27,7 +28,9 @@ export async function POST(request: NextRequest) {
             data: {
                 fileId: data.fileId,
                 content: data.content,
-                title: data.title
+                title: data.title,
+                color: data.color,
+                prioritize: data.prioritize,
             }
         });
         

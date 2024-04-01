@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-import { withUt } from "uploadthing/tw";
 
 const config: Config = {
   content: [
@@ -14,15 +13,10 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
-      animation: {
-        'rightThenLeft': 'rightThenLeft 3s linear infinite',
+      fontFamily: {
+        'jah': ['"Just Another Hand"','cursive'],
+        'handlee' : ['"Handlee"', 'cursive'],
       },
-      keyframes: {
-        rightThenLeft: {
-          '0%': { marginRight: '0%' },
-          '100%': { marginRight: '100%' },
-        }
-      }
     },
   },
   plugins: [],

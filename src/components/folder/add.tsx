@@ -17,7 +17,7 @@ const FolderAdd = ({mutate}:{mutate:KeyedMutator<any>}) => {
     const [name, setName] = useState('');
     const [image, setImage] = useState<any>(null)
     const [submit, setSubmit] = useState(false)
-    const userId = useContext(UserContext);
+    const user = useContext(UserContext);
 
     const toggleSubmit = async() =>{
         await promiseNotification(handleSubmit, 'Uploading...', 'Uploaded', 'Failed')
@@ -28,7 +28,7 @@ const FolderAdd = ({mutate}:{mutate:KeyedMutator<any>}) => {
         const payload = { 
             title: name,
             slug : slugify(name),
-            authorId : userId,
+            authorId : user.id,
             image:{
                 url: image.url, 
                 alt:image.key

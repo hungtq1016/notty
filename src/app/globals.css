@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Just+Another+Hand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,25 +11,4 @@
 
 .has-tooltip:hover .tooltip {
   @apply visible z-50;
-}
-
-.pin {
-  background-color: #aaa;
-  display: block;
-  height: 10px;
-  width: 2px;
-  z-index: 1;
-}
-
-.pin:after {
-  background-color: #A31;
-  background-image: radial-gradient(25% 25%, circle, hsla(0,0%,100%,.3), hsla(0,0%,0%,.3));
-  border-radius: 50%;
-  content: '';
-  height: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  position: absolute;
-  top: -10px;
-  width: 12px;
 }

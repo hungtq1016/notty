@@ -36,6 +36,8 @@ export type TNote = {
     content : string;
     createdAt? : string;
     updatedAt? : string;
+    color: string;
+    prioritize : boolean;
     fileId? : string;
 }
 
