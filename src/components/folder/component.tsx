@@ -4,7 +4,7 @@ import {
   TDynamic,
   TFolder,
 } from '@/types/type';
-import useFolders from '@/utils/hooks/useFolders';
+import useFolders from '@/utils/hooks/use-folders';
 
 import { UserContext } from '../context/user-context';
 import LoadingFolderLayout from '../loading/folder';

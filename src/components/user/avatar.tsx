@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import useCurrentUser from "@/utils/hooks/useCurrentUser";
+import useCurrentUser from "@/utils/hooks/use-current-user";
 import { redirect } from "next/navigation";
 
 const UserAvatar = () => {

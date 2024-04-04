@@ -5,7 +5,7 @@ import { get } from '@/utils/helpers/request.helper';
 
 const useNotes= (query?:any) => {
     
-  const { data, error, isLoading, mutate , isValidating} = useSWR<TNote[]>('/api/notes', (url:string) => get(url,query));
+  const { data, error, isLoading, mutate , isValidating} = useSWR<TNote[]>('/api/note', (url:string) => get(url,query));
 
   return {
     data,

@@ -1,12 +1,11 @@
 import { classNames, hrefBuilder } from "@/utils/utils/string.util";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { usePathname } from 'next/navigation'
 
 export default function FolderMe() {
 
-    const params = useParams<{ folder: string }>();
-    const isActived = params.folder === 'me';
-
+    const pathname = usePathname()
+    const isActived = pathname === '/note/me';
     return (
         <Link href={hrefBuilder(["me"])} className="group">
             <div className={classNames(isActived ? "bg-sky-600 rounded-2xl":"bg-white group-hover:bg-sky-600 group-hover:rounded-2xl rounded-full " ,"w-12 h-12 flex items-center justify-center  transition-opacity")}>

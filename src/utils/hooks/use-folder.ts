@@ -5,7 +5,7 @@ import { TFolder } from '@/types/type';
 
 const useFolder= (slug:string) => {
     
-  const { data, error, isLoading, mutate , isValidating} = useSWR<TFolder>('/api/folders/'+slug, get);
+  const { data, error, isLoading, mutate , isValidating} = useSWR<TFolder>('/api/folder/'+slug, get);
 
   
 

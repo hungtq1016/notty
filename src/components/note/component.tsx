@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { FileContext, FileProvider } from '../context/file-context';
 import NoteItem from './item';
-import useNotes from '@/utils/hooks/useNotes';
+import useNotes from '@/utils/hooks/use-notes';
 import NoteLoading from '../loading/note';
 import { TNote } from '@/types/type';
 import { post } from '@/utils/helpers/request.helper';
@@ -31,7 +31,7 @@ function NoteComponent() {
             updatedAt: new Date().toISOString(),
         }
         setNotes([...notes, init])
-        post('/api/notes', init)
+        post('/api/note', init)
     }
 
     if (notes.length === 0) {
@@ -54,7 +54,7 @@ function NoteComponent() {
         <div className="py-5">
             <ul className='w-full h-screen grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
                 {notes.map((item, index) => (
-                    <NoteItem key={index} {...item}/>
+                    <NoteItem key={index} note={item} onDelete={()=>removeNote(index)}/>
                 ))}
             </ul>
         </div>

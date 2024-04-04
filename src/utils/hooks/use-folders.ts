@@ -5,7 +5,7 @@ import { get } from '@/utils/helpers/request.helper';
 
 const useFolders= (query?:any) => {
     
-  const { data, error, isLoading, mutate , isValidating} = useSWR<TFolder[]>('/api/folders', (url:string) => get(url,query));
+  const { data, error, isLoading, mutate , isValidating} = useSWR<TFolder[]>('/api/folder', (url:string) => get(url,query));
 
   return {
     data,

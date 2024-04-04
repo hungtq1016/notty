@@ -1,5 +1,5 @@
 import { PropsWithChildren, createContext } from "react";
-import useUser from '@/utils/hooks/useCurrentUser'
+import useUser from '@/utils/hooks/use-current-user'
 import { TUser } from "@/types/type";
 import NoteLoading from "../loading/note";
 

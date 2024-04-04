@@ -28,7 +28,7 @@ const FileAdd = ({mutate}:{mutate:KeyedMutator<any>}) => {
             folderId: folder.id,
         }
 
-        await post('/api/files', payload).then(()=>{
+        await post('/api/file', payload).then(()=>{
             
             mutate()
             setIsOpen(false)

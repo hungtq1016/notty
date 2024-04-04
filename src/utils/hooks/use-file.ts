@@ -5,7 +5,7 @@ import { TFile } from '@/types/type';
 
 const useFile = (slug:string) => {
     
-  const { data, error, isLoading, mutate , isValidating} = useSWR<TFile>('/api/files/'+slug, get);
+  const { data, error, isLoading, mutate , isValidating} = useSWR<TFile>('/api/file/'+slug, get);
 
   return {
     data,

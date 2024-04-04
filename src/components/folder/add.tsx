@@ -35,7 +35,7 @@ const FolderAdd = ({mutate}:{mutate:KeyedMutator<any>}) => {
             }
         }
 
-        await post('/api/folders', payload).then(()=>{
+        await post('/api/folder', payload).then(()=>{
             
             mutate()
             setIsOpen(false)

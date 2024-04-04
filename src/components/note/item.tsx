@@ -30,13 +30,13 @@ function NoteItem({ note, onDelete }: { note: TNote, onDelete: () => void }) {
     })
 
     const edit = async () => {
-        await put('/api/notes/' + event.id, event)
+        await put('/api/note/' + event.id, event)
         setEditable(false)
     }
 
     const remove = async () => {
         onDelete()
-        await del('/api/notes/' + event.id, event)
+        await del('/api/note/' + event.id, event)
     }
 
     return (

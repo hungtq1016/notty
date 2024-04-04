@@ -2,7 +2,7 @@
 
 import { useContext } from "react";
 import { FolderContext } from "../context/folder-context";
-import useFiles from "@/utils/hooks/useFiles";
+import useFiles from "@/utils/hooks/use-files";
 import FileItem from "./item";
 import FileAdd from "./add";
 import { redirect } from "next/navigation";

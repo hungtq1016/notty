@@ -5,7 +5,7 @@ import { get } from '@/utils/helpers/request.helper';
 
 const useFiles= (query?:TDynamic<string>) => {
     
-  const { data, error, isLoading, mutate , isValidating} = useSWR<TFile[]>('/api/files', (url:string) => get(url,query));
+  const { data, error, isLoading, mutate , isValidating} = useSWR<TFile[]>('/api/file', (url:string) => get(url,query));
 
   return {
     data,

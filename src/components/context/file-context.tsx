@@ -2,7 +2,7 @@
 import { PropsWithChildren, createContext } from "react";
 import { redirect, useParams } from "next/navigation";
 import { TFile } from "@/types/type";
-import useFile from "@/utils/hooks/useFile";
+import useFile from "@/utils/hooks/use-file";
 import NoteLoading from "../loading/note";
 
 const FileContext = createContext<TFile>({} as TFile);
