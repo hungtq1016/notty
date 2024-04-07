@@ -1,11 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 
-export default function ConfirmDelete({ id, onAction }: { id: string, onAction: () => void }) {
+export default function ConfirmDelete({ onAction }: { onAction: () => void }) {
     let [isOpen, setIsOpen] = useState(false)
 
     const handleDelete = () => {
-        console.log('delete', id);
         onAction();
     }
 

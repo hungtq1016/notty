@@ -44,7 +44,9 @@ export type TNote = {
 export type TDynamic<T> = {
     [key:string]: T
 }
-
+export type TQuery = {
+    [key:string]: string | number | undefined
+}
 export type TUser = {
     id : string;
     name : string;
@@ -83,3 +85,4 @@ export type TSession = {
     expires : string
     user : TUser;
 }
+

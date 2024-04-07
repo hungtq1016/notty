@@ -1,22 +1,38 @@
 'use client'
 
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FolderContext } from "../context/folder-context";
-import useFiles from "@/utils/hooks/use-files";
 import FileItem from "./item";
 import FileAdd from "./add";
-import { redirect } from "next/navigation";
 import LoadingFileLayout from "../loading/file";
+import { useParams } from 'next/navigation'
+import useFetch from "@/utils/hooks/use-fetch";
+import { TFile } from "@/types/type";
 
 const FileComponent = () => {
 
     const folder = useContext(FolderContext);
 
-    if (folder === null) redirect('/note/me')
+    const params = useParams<{ folder: string }>();
 
-    const { data, error, isLoading, mutate, isValidating } = useFiles({ folderId: folder.id });
+    const { data, isLoading, error, isValidating, mutate } = useFetch<TFile[]>("/api/file",{ folderId: folder.id });
 
-    if (isLoading || error || isValidating) return <LoadingFileLayout />
+    const [files, setFiles] = useState<TFile[] | undefined>(data)
+
+    useEffect(() => {
+        setFiles(data);
+    }, [data])
+
+    useEffect(() => {
+        mutate();
+    }, [params.folder])
+
+    if (isLoading || error || files === undefined || isValidating) return <LoadingFileLayout />
+
+    const removeFile = (index: number) => {
+        const newFiles = files.filter((_, i) => i !== index);
+        setFiles(newFiles);
+    }
 
     return (
         <div className="flex grow flex-col gap-y-5">
@@ -27,9 +43,11 @@ const FileComponent = () => {
                 </h3>
                 <nav className="flex flex-1 flex-col">
                     <ul role="list" className="-mx-2 space-y-1 flex flex-1 flex-col">
-                        {data?.map((file) => (
+                        {files.map((file, index) => (
                             <li key={file.id}>
-                                <FileItem file={file} />
+                                <FileItem 
+                                onDelete={()=>removeFile(index)}
+                                file={file} />
                             </li>
                         ))}
                     </ul>

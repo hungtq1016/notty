@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { TrashIcon as TrashIconSolid, Cog6ToothIcon as Cog6ToothIconSolid, PencilIcon as PencilIconSolid } from '@heroicons/react/24/solid'
 import { Cog6ToothIcon, TrashIcon, PencilIcon } from '@heroicons/react/24/outline'
 
-export default function FileItemDropdown({className}:{className?:string}) {
+export default function FileItemDropdown({className, onAction}:{className?:string, onAction: () => void}) {
 
     type TFileItemDropdown = {
         name: string
@@ -11,9 +11,14 @@ export default function FileItemDropdown({className}:{className?:string}) {
         iconSolid: React.FC<React.SVGProps<SVGSVGElement>>
         action : () => void
     }
+
+    const handleDelete = () => {
+        onAction();
+    }
+
     const options : TFileItemDropdown[] = [
         { name: 'Edit', icon: PencilIcon, iconSolid: PencilIconSolid , action: () => console.log('Edit')},
-        { name: 'Delete', icon: TrashIcon, iconSolid: TrashIconSolid, action: () => console.log('Delete')},
+        { name: 'Delete', icon: TrashIcon, iconSolid: TrashIconSolid, action: handleDelete},
     ]
 
     return (

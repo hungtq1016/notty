@@ -3,11 +3,17 @@ import { capitalizeFirstChar, classNames, hrefBuilder } from "@/utils/utils/stri
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import FileItemDropdown from "./dropdown";
+import { del } from "@/utils/helpers/request.helper";
 
-const FileItem = ({ file }: { file: TFile }) => {
+const FileItem = ({ file, onDelete }: { file: TFile, onDelete: () => void }) => {
 
     const params = useParams<{ folder: string; file: string }>();
     const isActived = params.file === file.slug;
+
+    const onRemove = async () => {
+        onDelete()
+        await del(`/api/file/${file.slug}/${file.id}`)
+    }
 
     return (
         <div className="group flex gap-x-1 justify-between items-center">
@@ -32,7 +38,9 @@ const FileItem = ({ file }: { file: TFile }) => {
 
                 <span>{file.name}</span>
             </Link>
-            <FileItemDropdown className="group-hover:inline hidden" />
+            <FileItemDropdown 
+            onAction={onRemove}
+            className="group-hover:inline hidden" />
         </div>
     );
 }
